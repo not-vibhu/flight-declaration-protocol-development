@@ -4,5 +4,4 @@ The Flight Declaration protocol aims to facilitate the secure exchange of flight
 
 ## Get involved
 
-External contributions are welcome. Each proposal will be carefully considered by the Project Management Committee.
-You can reach out to the committee by writing to flight-declaration-pmc@utm.aero
+External contributions are welcome. The best way to provide feedback and get involved is to open new issues and comment on existing open ones. 
