@@ -14,8 +14,7 @@
 		- [5.3.2 error](#532-error)
 		- [5.3.3 flightPart](#533-flightpart)
 			- [5.3.1 Additional Notes](#531-additional-notes)
-		- [5.5 ident](#55-ident)
-		- [5.5.1 Notes](#551-notes)
+			- [5.3.2 ident](#532-ident)
 		- [5.6 operationMode enum](#56-operationmode-enum)
 		- [5.2.1 altitudeDatum enum](#521-altitudedatum-enum)
 	- [3 Standard Concepts](#3-standard-concepts)
@@ -31,8 +30,7 @@
 	- [8 Attribution](#8-attribution)
 
 ## 1 Introduction
-_A protocol designed to facilitate the secure exchange of flight situation data between UTM Providers, 
-while allowing each UTM Provider to retain ownership of their customer data._
+_A protocol designed to facilitate the secure exchange of flight situation data between UTM Providers, while allowing each UTM Provider to retain ownership of their customer data._
 
 ## 2 Definitions and Scope
 
@@ -53,8 +51,8 @@ In this specification, we introduce and propose the following definitions:
 ### 2.2 Out of Scope
 
 The following areas are regarded as out of scope from this specification, as their definition will necessarily depend on implementing parties' business models they are effectively implementation details, where practical, the authors have attempted to address any "out of scope" items by providing prototype implementations  that early adopters/testers of this specification can use to practically  verify the suitability of this protocol against its objectives.
-- It is not the primary concern of each individual UTM Provider to build reliable, distributed infrastructure to facilitate the exchange of flight data between competing providers, however it is recognized that access to such data would enhance the proposition of Interested Parties;
 
+- It is not the primary concern of each individual UTM Provider to build reliable, distributed infrastructure to facilitate the exchange of flight data between competing providers, however it is recognized that access to such data would enhance the proposition of Interested Parties;
 
 - The number of drone flights is set to rise dramatically over the coming years, and as such not every UTM Provider will have the capability and/or desire to implement a notification-based geospatial system.
 
@@ -158,6 +156,7 @@ Below is a set of messages that would be sent for a flight that is not planned i
 
 **Example 2:** A BVLOS delivery flight with an out bound leg and a return leg, the return leg being flown an hour 
 after the return leg. This drone is expecting to provide telemetry during the flight
+
 	{
 	"flightId": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
 	"sequenceNumber": 0,
@@ -246,6 +245,7 @@ The primary entity exchanged between Originating and Interested Parties.
 		"flightDeclaration": { ... },
 		"version": "1.0.0"
 	}
+
 | Name | Description | Type |
 | --- | --- | --- |
 | **flightId** | Identifier provided by the Originating Party that uniquely identifies this declaration from other declarations provided by the same Originating Party. | string |
@@ -270,11 +270,9 @@ The primary entity exchanged between Originating and Interested Parties.
 
 #### 5.3.1 Notes
 
-It is expected that a future version of this specification will include a telemetryEndPoint field. This is an endpoint 
-that an interest party would be able to call to get live telemetry while the flight was in progress.
+It is expected that a future version of this specification will include a telemetryEndPoint field. This is an endpoint that an interest party would be able to call to get live telemetry while the flight was in progress.
 
-In future, we recommend moving to a more structured taxonomy of flight purposes however this is outside the scope of our 
-initial draft and we would welcome input focused in this area.
+In future, we recommend moving to a more structured taxonomy of flight purposes however this is outside the scope of our initial draft and we would welcome input focused in this area.
 
 ### 5.3.2 error
 
@@ -318,7 +316,7 @@ A flight consists of one or more parts and these parts must be declared as a Geo
 - For version 1.0 of the specification, neither sps nor amsl are supported datums for maxAltitude or minAltitude
 
    
-### 5.5 ident
+#### 5.3.2 ident
 
 To allow a flight to be correlated with positional data from other sources (e.g. ADSB or RADAR) a flight declaration can 
 include one or more _idents_ that will be associated with this flight.
@@ -333,8 +331,6 @@ include one or more _idents_ that will be associated with this flight.
         "ident": "4840D6"
     }
 
-### 5.5.1 Notes
-
 It is recognised that not all idents that a drone may be allocated will be available at the time of flight declaration. If a drone is allocated an ident it should update the flight declaration to include the new ident. It must not be treated as an error if the Interested Party does not recognise a method that is provided.
 
 ### 5.6 operationMode enum
@@ -345,7 +341,6 @@ It is recognised that not all idents that a drone may be allocated will be avail
 | **evlos** | The drone is being flown by a human pilot with extended visual line of sight – typically enabled by the use of observers. |
 | **bvlos** | The drone is being flown by a human pilot beyond visual line of sight |
 | **automated** | The drone does not have a human pilot |
-
 
 ### 5.2.1 altitudeDatum enum
 
@@ -365,7 +360,6 @@ An altitude 152.4 metres above ground level would be represented by the followin
         "datum": "agl"
     }
 
-
 ## 3 Standard Concepts
 
 ### 3.3 Dates & Times
@@ -373,8 +367,7 @@ An altitude 152.4 metres above ground level would be represented by the followin
 Dates and times will follow the **ISO-8601** **[[5]](#Ref-5)** formatting standard. Local times are not supported; all times must be in UTC or have a time zone offset specified.
 
 
-The format pattern for date times is `YYYY-MM-DDTHH:mm:ss.sssZ` where Z is either the character _Z_ to represent UTC, _or_ the +/- timezone offset from UTC. If a message is received with no timezone offset, it should be regarded as an error 
-and the correct error code returned.
+The format pattern for date times is `YYYY-MM-DDTHH:mm:ss.sssZ` where Z is either the character _Z_ to represent UTC, _or_ the +/- timezone offset from UTC. If a message is received with no timezone offset, it should be regarded as an error and the correct error code returned.
 
 The requirement to specify times or dates does not apply to the specification, so all temporal data will be defined as a _datetime_.
 
