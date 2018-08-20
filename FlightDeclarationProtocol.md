@@ -5,26 +5,25 @@
 	- [2 Definitions and Scope](#2-definitions-and-scope)
 		- [2.1 Definitions](#21-definitions)
 		- [2.2 Out of Scope](#22-out-of-scope)
-	- [3 Example message flows](#3-example-message-flows)
-	- [4 Example Declarations](#4-example-declarations)
-	- [5 Details](#5-details)
-		- [5.1 message](#51-message)
-		- [5.3 flightDeclaration](#53-flightdeclaration)
-			- [5.3.1 Notes](#531-notes)
-		- [5.3.2 error](#532-error)
-		- [5.3.3 flightPart](#533-flightpart)
-			- [5.3.1 Additional Notes](#531-additional-notes)
-			- [5.3.2 ident](#532-ident)
-		- [5.6 operationMode enum](#56-operationmode-enum)
-		- [5.2.1 altitudeDatum enum](#521-altitudedatum-enum)
-	- [3 Standard Concepts](#3-standard-concepts)
-		- [3.3 Dates & Times](#33-dates--times)
-		- [3.4 Geospatial Data](#34-geospatial-data)
-		- [3.5 Distances](#35-distances)
-		- [3.6 Flight Identifier](#36-flight-identifier)
-		- [3.7 Atomic updates](#37-atomic-updates)
-		- [3.8 Timestamp and Sequence Number](#38-timestamp-and-sequence-number)
-		- [3.9 Deletion](#39-deletion)
+	- [3 Example Declarations](#3-example-declarations)
+	- [4 Details](#4-details)
+		- [4.1 message](#41-message)
+		- [4.2 flightDeclaration](#42-flightdeclaration)
+			- [4.2.1 Notes](#421-notes)
+		- [4.2.2 error](#422-error)
+		- [4.3 flightPart](#43-flightpart)
+			- [4.3.1 Additional Notes](#431-additional-notes)
+			- [4.3.2 ident](#432-ident)
+		- [4.3 operationMode enum](#43-operationmode-enum)
+		- [4.4 altitudeDatum enum](#44-altitudedatum-enum)
+	- [5 Standard Concepts](#5-standard-concepts)
+		- [5.1 Dates & Times](#51-dates--times)
+		- [5.2 Geospatial Data](#52-geospatial-data)
+		- [5.3 Distances](#53-distances)
+		- [5.4 Flight Identifier](#54-flight-identifier)
+		- [5.5 Atomic updates](#55-atomic-updates)
+		- [5.6 Timestamp and Sequence Number](#56-timestamp-and-sequence-number)
+		- [5.7 Deletion](#57-deletion)
 	- [6 References](#6-references)
 	- [7 Revision History](#7-revision-history)
 	- [8 Attribution](#8-attribution)
@@ -68,31 +67,7 @@ The following areas are regarded as out of scope from this specification, as the
 
 - The protocol recommends – but does not presently mandate – that the parties perform verification of each message. It is expected that this could take the form of a cryptographically-signed hash included as part of the HTTP headers.
 
-
-## 3 Example message flows
-
-**Example 1**
-
-Below is a description of a set of messages that would be sent by an Originating Party when one of its users planned a drone operation in-advance of the actual flight time, revised once, then actually executed the flight:
-
-- Initial declaration of intent to fly. The Sequence number is 0, the start _datetime_ is in the future.
-- Closer to commencement of the operation as declared in the original Flight Declaration, the operator notifies their UTM Provider of a revision to the flight plan. The Originating Party issues a subsequent Flight Declaration which is then sent on to all the Interested Parties, and the sequence number is then incremented to 1.
-- At take-off, the updated message now includes a take-off time and has the sequence number incremented to 2, and subsequently distributed to all parties.
-- At the conclusion of the operation, the update message has a landing time and the sequence number set to 3.
-
-**Example 2**
-
-Below is a set of messages that would be sent for a flight that is planned in advance and then cancelled
-- Initial declaration of intent to fly. The sequence number is 0, the start date is in the future.
-- Deletion of the flight – the update message has a null value for flightDeclaration and the sequence number is incremented to 1.
-
-**Example 3**
-
-Below is a set of messages that would be sent for a flight that is not planned in advance planned in advance
-
-- Initial declaration of flight. The sequence number is 0, the start date and the take-off time are set to that actual time of take-off.
-
-## 4 Example Declarations
+## 3 Example Declarations
 
 
 **Example 1:** A VLOS survey flight with a polygonal area of operation.
@@ -175,6 +150,10 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 				"maxAlt": {
 				"metres": 152.4,
 				"datum": "agl"
+				},
+				"minAlt": {
+				"metres": 102.4,
+				"datum": "agl"
 				}
 			},
 			"geometry": {
@@ -199,6 +178,10 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 				"endTime": "2017-02-01T16:30:00+00:00",
 				"maxAlt": {
 				"metres": 152.4,
+				"datum": "agl"
+				},
+				"minAlt": {
+				"metres": 102.4,
 				"datum": "agl"
 				}
 			},
@@ -233,8 +216,8 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 	}
 
 
-## 5 Details
-### 5.1 message
+## 4 Details
+### 4.1 message
 
 The primary entity exchanged between Originating and Interested Parties.
 
@@ -249,12 +232,12 @@ The primary entity exchanged between Originating and Interested Parties.
 | Name | Description | Type |
 | --- | --- | --- |
 | **flightId** | Identifier provided by the Originating Party that uniquely identifies this declaration from other declarations provided by the same Originating Party. | string |
-| **sequenceNumber** | A number that represents the version of this message data. When a record is modified, the sequence number must be numerically greater than the previous update. | number (uint64) |
+| **sequenceNumber** | **(optional)** A number that represents the version of this message data. When a record is modified, the sequence number must be numerically greater than the previous update. | number (uint64) |
 | **timeStamp** |  **ISO-8601** **[[5]](#Ref-5)** formatting standard. Local times are not supported; all times must be in UTC or have a time zone offset specified. | YYYY-MM-DDTHH:mm:ss.sssZ |
 | **flightDeclaration** | A flightDeclaration object describing this proposed flight. To delete a flight, this field should be null. | flightDeclaration |
 | **version** | The version of this protocol that the message has been implemented from. | string - currently "0.2.0" |
 
-### 5.3 flightDeclaration
+### 4.2 flightDeclaration
 
 | Name | Description | Type |
 | --- | --- | --- |
@@ -268,13 +251,13 @@ The primary entity exchanged between Originating and Interested Parties.
 | **actualTakeOffTime** | The time the flight took off. This value can be null or omitted if the take-off time is not known | datetime _[optional]_ |
 | **actualLandingTime** | The time the flight completed. This value can be null or omitted if the landing time is not known | datetime _[optional]_ |
 
-#### 5.3.1 Notes
+#### 4.2.1 Notes
 
 It is expected that a future version of this specification will include a telemetryEndPoint field. This is an endpoint that an interest party would be able to call to get live telemetry while the flight was in progress.
 
 In future, we recommend moving to a more structured taxonomy of flight purposes however this is outside the scope of our initial draft and we would welcome input focused in this area.
 
-### 5.3.2 error
+### 4.2.2 error
 
 | Name | Description | Type |
 | --- | --- | --- |
@@ -290,7 +273,7 @@ In future, we recommend moving to a more structured taxonomy of flight purposes 
     }
     
 
-### 5.3.3 flightPart 
+### 4.3 flightPart 
 
 
 A flight consists of one or more parts and these parts must be declared as a GeoJSON FeatureCollection. Each part has a start and end time as well as a geography and maximum altitude. In addition to describing the the Geogrpahic area of operation in a Polygon or LineString format. The following properties must be declared for each format. 
@@ -298,13 +281,13 @@ A flight consists of one or more parts and these parts must be declared as a Geo
 | Name | Description | Type |
 | --- | --- | --- |
 | **id** | An identifier that uniquely identifies this part within this flight. | string |
-| **geography** | A Polygon or LineString describing the planned operating area or route. | geometry |
+| **geography** | A GeoJSON Feature Collection describing the planned operating area or route. | geometry |
 | **startTime** | The time that the flight is expected to start. | datetime |
 | **endTime** | The time that the flight is expected to be completed by. This must always be greater than startTime. | datetime |
 | **maxAltitude** | The maximum altitude that the drone will achieve during the _flightPart_. | altitude |
 | **minAltitude** | The minumum altitude that the drone will achieve during the _flightPart_. | altitude |
 
-#### 5.3.1 Additional Notes
+#### 4.3.1 Additional Notes
 
 - No parts of a declared flight can have overlapping start and end times.
 - For the geography, a:
@@ -316,7 +299,7 @@ A flight consists of one or more parts and these parts must be declared as a Geo
 - For version 1.0 of the specification, neither sps nor amsl are supported datums for maxAltitude or minAltitude
 
    
-#### 5.3.2 ident
+#### 4.3.2 ident
 
 To allow a flight to be correlated with positional data from other sources (e.g. ADSB or RADAR) a flight declaration can 
 include one or more _idents_ that will be associated with this flight.
@@ -333,7 +316,7 @@ include one or more _idents_ that will be associated with this flight.
 
 It is recognised that not all idents that a drone may be allocated will be available at the time of flight declaration. If a drone is allocated an ident it should update the flight declaration to include the new ident. It must not be treated as an error if the Interested Party does not recognise a method that is provided.
 
-### 5.6 operationMode enum
+### 4.3 operationMode enum
 
 | Datum | Description |
 | --- | --- |
@@ -342,7 +325,7 @@ It is recognised that not all idents that a drone may be allocated will be avail
 | **bvlos** | The drone is being flown by a human pilot beyond visual line of sight |
 | **automated** | The drone does not have a human pilot |
 
-### 5.2.1 altitudeDatum enum
+### 4.4 altitudeDatum enum
 
 This specification defines the following altitude datums, however specific messages may not allow altitudes to be defined using certain datums (e.g. it makes no sense to declare the maximum altitude of a pre-planned very low altitude flight relative to the SPS datum). The following string values are supported for datums effectively creating an enumeration.
 
@@ -360,9 +343,9 @@ An altitude 152.4 metres above ground level would be represented by the followin
         "datum": "agl"
     }
 
-## 3 Standard Concepts
+## 5 Standard Concepts
 
-### 3.3 Dates & Times
+### 5.1 Dates & Times
 
 Dates and times will follow the **ISO-8601** **[[5]](#Ref-5)** formatting standard. Local times are not supported; all times must be in UTC or have a time zone offset specified.
 
@@ -373,7 +356,7 @@ The requirement to specify times or dates does not apply to the specification, s
 
 No guarantees that a timezone offset will be preserved should be made.
 
-### 3.4 Geospatial Data
+### 5.2 Geospatial Data
 
 Geospatial data must be described using a geometry object as defined in the _GeoJSON_ specification [[6]](#Ref-6) with the following specific requirements:
 
@@ -383,25 +366,25 @@ Geospatial data must be described using a geometry object as defined in the _Geo
 
 Latitude and Longitude should not be specified to more than 8 decimal places. This gives an accuracy of approximately 1.1 mm at the equator making any further digits superfluous.
 
-### 3.5 Distances
+### 5.3 Distances
 
 All distances (both horizontal and vertical) are specified in metres.
 
-### 3.6 Flight Identifier
+### 5.4 Flight Identifier
 
 This is a unique identifier generated by the Originating Party that should provide an _anonymous_ identifier for this flight. The Originating Party must be able to use this identifier to identify the original records that resulted in this flight. Together with knowledge of who the Originating Party is, the flight identifier constitutes a globally unique identifier for this flight. i.e. Identifiers may be shared across originators, but the must be unique within an originator.
 
-### 3.7 Atomic updates
+### 5.5 Atomic updates
 
 When a Flight Declaration is updated by an Originating Party, that _entire_ Flight Declaration record will be sent. This allows the receiving service to replace the record in its entirety and allows the system to self-heal in the event of a missing message. This also removes the need to differentiate from a create and update – both are handled in the same way.
 
-### 3.8 Timestamp and Sequence Number
+### 5.6 Timestamp and Sequence Number
 
 To account for the possibility of messages being delivered out-of-order, a combination of timestamp and sequence number must be used. A timestamp of the creation of the message must be added at every declaration. When a flight declaration is updated, the sequence number must also be increased to make it numerically greater than the previous update. This allows the receiver to ensure that they are not overwriting more recent data if they process a delayed update message. The timestamp and the sequence numeber used in combination serve as the primary method of verification of sequence. The timestamp should be considered a **primary** method while the sequence number should be considered as a **secondary** form of verification. 
 
 Sequence numbers do not have to be consecutive, nor do they need to start from zero, however they do need to be an unsigned integer – i.e. a whole number greater than or equal to zero.
 
-### 3.9 Deletion
+### 5.7 Deletion
 
 To delete a Flight Declaration a null flightDeclaration element should be sent in the [message](#message). The flightId must be provided and the sequence number increased. It is regarded as invalid to update a previously deleted record, once a flight declaration is deleted it must not be re-activated.
 
