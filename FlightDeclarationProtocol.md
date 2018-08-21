@@ -9,13 +9,11 @@
 	- [4 Details](#4-details)
 		- [4.1 message](#41-message)
 		- [4.2 flightDeclaration](#42-flightdeclaration)
-			- [4.2.1 Notes](#421-notes)
-		- [4.2.2 error](#422-error)
+			- [4.2.1 error](#421-error)
 		- [4.3 flightPart](#43-flightpart)
-			- [4.3.1 Additional Notes](#431-additional-notes)
-			- [4.3.2 ident](#432-ident)
-		- [4.3 operationMode enum](#43-operationmode-enum)
-		- [4.4 altitudeDatum enum](#44-altitudedatum-enum)
+			- [4.3.1 ident](#431-ident)
+		- [4.4 operationMode enum](#44-operationmode-enum)
+		- [4.5 altitudeDatum enum](#45-altitudedatum-enum)
 	- [5 Standard Concepts](#5-standard-concepts)
 		- [5.1 Dates & Times](#51-dates--times)
 		- [5.2 Geospatial Data](#52-geospatial-data)
@@ -238,10 +236,25 @@ The primary entity exchanged between Originating and Interested Parties.
 | **version** | The version of this protocol that the message has been implemented from. | string - currently "0.2.0" |
 
 ### 4.2 flightDeclaration
+	{
+			"parts": {...},
+			"purpose": "Delivery",
+			"expectTelemetry": true,
+			"originatingParty": "Originating Party, Inc.",
+			"contactUrl": "https://utm.originatingparty.com/contact?5a7f3377-b991-4cc8-af2d-379d57f786d1",
+			"operationMode": "bvlos",
+			"idents": [
+				{
+					"method": "adsb",
+					"ident": "4840D6"
+				}
+			]
+	}
+
 
 | Name | Description | Type |
 | --- | --- | --- |
-| **parts** | One or more part that make up this flight | array |
+| **parts** | One or more part that make up this flight | GeoJSON FeatureCollection |
 |**purpose** | A human readable description of the reason the flight is being conducted. This field can be omitted if the end user chooses not to share the purpose of their flight. (_See notes_)| string |
 | **expectTelemetry** | A flag indicting whether it is expected that telemetry will be available during the flight. | boolean |
 | **originatingParty** | The name of the party that the flight was originally declared with. | string |
@@ -251,13 +264,10 @@ The primary entity exchanged between Originating and Interested Parties.
 | **actualTakeOffTime** | The time the flight took off. This value can be null or omitted if the take-off time is not known | datetime _[optional]_ |
 | **actualLandingTime** | The time the flight completed. This value can be null or omitted if the landing time is not known | datetime _[optional]_ |
 
-#### 4.2.1 Notes
-
 It is expected that a future version of this specification will include a telemetryEndPoint field. This is an endpoint that an interest party would be able to call to get live telemetry while the flight was in progress.
 
-In future, we recommend moving to a more structured taxonomy of flight purposes however this is outside the scope of our initial draft and we would welcome input focused in this area.
+#### 4.2.1 error
 
-### 4.2.2 error
 
 | Name | Description | Type |
 | --- | --- | --- |
@@ -267,14 +277,83 @@ In future, we recommend moving to a more structured taxonomy of flight purposes 
 
 **Example 1: Retry not required**
 
-    {
-        "errorDescription": "Server doesn't require sender to retry",
-        "shouldRetry": false
-    }
-    
-
+	{
+		"flightId":"5a7f3377-b991-4cc8-af2d-379d57f786d1",
+		"sequenceNumber":1,
+		"timeStamp":"2018-08-15T14:29:08.842Z",
+		"version":"1.0.0",
+		"parts": {...},
+		"error": {
+			"errorDescription": "Server doesn't require sender to retry",
+			"shouldRetry": false
+		}
+		
+	}
 ### 4.3 flightPart 
 
+	{
+			"type": "FeatureCollection",
+			"features": [
+				{
+				"type": "Feature",
+				"properties": {
+					"id": "0",
+					"startTime": "2017-02-01T15:00:00+00:00",
+					"endTime": "2017-02-01T15:30:00+00:00",
+					"maxAlt": {
+						"metres": 152.4,
+						"datum": "agl"
+					},
+					"minAlt": {
+						"metres": 102.4,
+						"datum": "agl"
+					}
+				},
+				"geometry": {
+					"type": "LineString",
+					"coordinates": [
+					[
+						-6.294693946838379,
+						53.21507929385216
+					],
+					[
+						-6.284565925598144,
+						53.22237697776495
+					]
+					]
+				}
+				},
+				{
+				"type": "Feature",
+				"properties": {
+					"id": "1",
+					"startTime": "2017-02-01T16:00:00+00:00",
+					"endTime": "2017-02-01T16:30:00+00:00",
+					"maxAlt": {
+						"metres": 152.4,
+						"datum": "agl"
+					},
+					"minAlt": {
+						"metres": 102.4,
+						"datum": "agl"
+					}
+				},
+				"geometry": {
+					"type": "LineString",
+					"coordinates": [
+					[
+						-6.28392219543457,
+						53.22213288519814
+					],
+					[
+						-6.294286251068114,
+						53.2148865564753
+					]
+					]
+				}
+				}
+			]
+	}
 
 A flight consists of one or more parts and these parts must be declared as a GeoJSON FeatureCollection. Each part has a start and end time as well as a geography and maximum altitude. In addition to describing the the Geogrpahic area of operation in a Polygon or LineString format. The following properties must be declared for each format. 
 
@@ -287,19 +366,15 @@ A flight consists of one or more parts and these parts must be declared as a Geo
 | **maxAltitude** | The maximum altitude that the drone will achieve during the _flightPart_. | altitude |
 | **minAltitude** | The minumum altitude that the drone will achieve during the _flightPart_. | altitude |
 
-#### 4.3.1 Additional Notes
-
 - No parts of a declared flight can have overlapping start and end times.
-- For the geography, a:
-  - _Polygon_ is used to define the area where a drone is expected to operate.
-  - _LineString_ should be used when there is a defined route that the drone is expected to follow.
+- For geography, a _FeatureCollection_ is to be used to describe :
+  - _Polygon_ is used to define the area where a drone is expected to operate. When the geography is a _Polygon_, multiple linear rings representing the exterior ring (and optionally 'holes') should be supported. This allows the geography to define parts of the area where the drone will not operate.
+  - _LineString_ should be used when there is a defined route that the drone is expected to follow. When the geography is a _LineString_, it may have more than two points.
   - No other GeoJSON types are supported.
-- When the geography is a _Polygon_, multiple linear rings representing the exterior ring (and optionally 'holes') should be supported. This allows the geography to define parts of the area where the drone will not operate.
-- When the geography is a _LineString_, it may have more than two points.
-- For version 1.0 of the specification, neither sps nor amsl are supported datums for maxAltitude or minAltitude
+  - For version 1.0 of the specification, neither sps nor amsl are supported datums for maxAltitude or minAltitude
 
    
-#### 4.3.2 ident
+#### 4.3.1 ident
 
 To allow a flight to be correlated with positional data from other sources (e.g. ADSB or RADAR) a flight declaration can 
 include one or more _idents_ that will be associated with this flight.
@@ -316,7 +391,7 @@ include one or more _idents_ that will be associated with this flight.
 
 It is recognised that not all idents that a drone may be allocated will be available at the time of flight declaration. If a drone is allocated an ident it should update the flight declaration to include the new ident. It must not be treated as an error if the Interested Party does not recognise a method that is provided.
 
-### 4.3 operationMode enum
+### 4.4 operationMode enum
 
 | Datum | Description |
 | --- | --- |
@@ -325,7 +400,7 @@ It is recognised that not all idents that a drone may be allocated will be avail
 | **bvlos** | The drone is being flown by a human pilot beyond visual line of sight |
 | **automated** | The drone does not have a human pilot |
 
-### 4.4 altitudeDatum enum
+### 4.5 altitudeDatum enum
 
 This specification defines the following altitude datums, however specific messages may not allow altitudes to be defined using certain datums (e.g. it makes no sense to declare the maximum altitude of a pre-planned very low altitude flight relative to the SPS datum). The following string values are supported for datums effectively creating an enumeration.
 
