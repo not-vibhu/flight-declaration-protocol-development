@@ -236,6 +236,7 @@ The primary entity exchanged between Originating and Interested Parties.
 | **version** | The version of this protocol that the message has been implemented from. | string - currently "0.2.0" |
 
 ### 4.2 flightDeclaration
+
 	{
 			"parts": {...},
 			"purpose": "Delivery",
@@ -244,10 +245,10 @@ The primary entity exchanged between Originating and Interested Parties.
 			"contactUrl": "https://utm.originatingparty.com/contact?5a7f3377-b991-4cc8-af2d-379d57f786d1",
 			"operationMode": "bvlos",
 			"idents": [
-				{
-					"method": "adsb",
-					"ident": "4840D6"
-				}
+					{
+						"method": "adsb",
+						"ident": "4840D6"
+					}
 			]
 	}
 
