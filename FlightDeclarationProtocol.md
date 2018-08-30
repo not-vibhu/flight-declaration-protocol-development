@@ -232,6 +232,7 @@ The primary entity exchanged between Originating and Interested Parties.
 
 	{
 		"flightId": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
+		"planId": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
 		"sequenceNumber": 0,
 		"timeStamp":"2018-08-15T14:29:08.842Z",
 		"flightDeclaration": { ... },
@@ -241,6 +242,7 @@ The primary entity exchanged between Originating and Interested Parties.
 | Name | Description | Type |
 | --- | --- | --- |
 | **flightId** | Identifier provided by the Originating Party that uniquely identifies this declaration from other declarations provided by the same Originating Party. | string |
+| **planId** | Identifier provided by the Originating Party that uniquely identifies this declaration as a part of a flight plan. | string |
 | **sequenceNumber** | **(optional)** A number that represents the version of this message data. When a record is modified, the sequence number must be numerically greater than the previous update. | number (uint64) |
 | **timeStamp** |  **ISO-8601** **[[5]](#Ref-5)** formatting standard. Local times are not supported; all times must be in UTC or have a time zone offset specified. | YYYY-MM-DDTHH:mm:ss.sssZ |
 | **flightDeclaration** | A flightDeclaration object describing this proposed flight. To delete a flight, this field should be null. | flightDeclaration |
@@ -427,6 +429,7 @@ An altitude 152.4 metres above ground level would be represented by the followin
 
 	{
 		"flightId":"5a7f3377-b991-4cc8-af2d-379d57f786d1",
+		"planId": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
 		"sequenceNumber":1,
 		"timeStamp":"2018-08-15T14:29:08.842Z",
 		"version":"1.0.0",
