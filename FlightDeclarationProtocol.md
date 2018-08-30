@@ -9,11 +9,12 @@
 	- [4 Details](#4-details)
 		- [4.1 message](#41-message)
 		- [4.2 flightDeclaration](#42-flightdeclaration)
-			- [4.2.1 error](#421-error)
-		- [4.3 flightPart](#43-flightpart)
-			- [4.3.1 ident](#431-ident)
+			- [4.3 idents](#43-idents)
 		- [4.4 operationMode enum](#44-operationmode-enum)
-		- [4.5 altitudeDatum enum](#45-altitudedatum-enum)
+		- [4.3 flightPart](#43-flightpart)
+			- [4.3.1 Notes](#431-notes)
+			- [4.3.2 altitudeDatum enum](#432-altitudedatum-enum)
+			- [4.6 error](#46-error)
 	- [5 Standard Concepts](#5-standard-concepts)
 		- [5.1 Dates & Times](#51-dates--times)
 		- [5.2 Geospatial Data](#52-geospatial-data)
@@ -71,7 +72,8 @@ The following areas are regarded as out of scope from this specification, as the
 **Example 1:** A VLOS survey flight with a polygonal area of operation.
 
 	{
-	"flightId":"5a7f3377-b991-4cc8-af2d-379d57f786d1",
+	"flightId": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
+	"planId": "05ccbdc5-81cd-4da4-aaf9-50feb3d3673c",
 	"sequenceNumber":0,
 	"timeStamp":"2018-08-15T14:29:08.842Z",
 	"version":"1.0.0",
@@ -86,6 +88,10 @@ The following areas are regarded as out of scope from this specification, as the
 					"endTime":"2017-02-01T15:30:00+00:00",
 					"maxAlt":{
 						"metres":152.4,
+						"datum":"agl"
+					},
+					"minAlt":{
+						"metres":132.0,
 						"datum":"agl"
 					}
 				},
@@ -123,7 +129,9 @@ The following areas are regarded as out of scope from this specification, as the
 		"expectTelemetry":false,
 		"originatingParty":"Originating Party, Inc.",
 		"contactUrl":"https://utm.originatingparty.com/contact?d6c8cec9-2d57-43f6-8301-53efee5702b4",
-		"operationMode":"vlos"
+		"operationMode":"vlos",
+		"actualTakeOffTime" : "2018-08-04T22:44:30.652Z",
+		"actualLandingTime" : "2018-08-30T14:51:10.802773Z"
 	}
 	}
 
@@ -132,6 +140,7 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 
 	{
 	"flightId": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
+	"planId": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
 	"sequenceNumber": 0,
 	"timeStamp": "2018-08-15T14:29:08.842Z",
 	"version": "1.0.0",
@@ -204,12 +213,14 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 		"originatingParty": "Originating Party, Inc.",
 		"contactUrl": "https://utm.originatingparty.com/contact?5a7f3377-b991-4cc8-af2d-379d57f786d1",
 		"operationMode": "bvlos",
-		"ident": [
+		"idents": [
 		{
 			"method": "adsb",
 			"ident": "4840D6"
 		}
-		]
+		],
+		"actualTakeOffTime" : "2018-08-04T22:44:30.652Z",
+		"actualLandingTime" : "2018-08-30T14:51:10.802773Z"
 	}
 	}
 
@@ -250,6 +261,8 @@ The primary entity exchanged between Originating and Interested Parties.
 						"ident": "4840D6"
 					}
 			]
+			"actualTakeOffTime" : "2018-08-04T22:44:30.652Z",
+			"actualLandingTime" : "2018-08-30T14:51:10.802773Z"
 	}
 
 
@@ -267,30 +280,47 @@ The primary entity exchanged between Originating and Interested Parties.
 
 It is expected that a future version of this specification will include a telemetryEndPoint field. This is an endpoint that an interest party would be able to call to get live telemetry while the flight was in progress.
 
-#### 4.2.1 error
 
+   
+#### 4.3 idents
+
+To allow a flight to be correlated with positional data from other sources (e.g. ADSB or RADAR) a flight declaration can 
+include one or more _idents_ that will be associated with this flight.
 
 | Name | Description | Type |
 | --- | --- | --- |
-| **errorDescription** | A human-readable description of what the error was. | string |
-| **shouldRetry** | A flag to indicate that the whether the message should be queued for resending. | bool |
-| **paramName** | If the error was caused due to validation failure, the name of the parameter should be provided in this field. | string _[optional]_ |
+| **method** | The name of the technology providing the ident | string { "adsb", "flarm" } |
+| **ident** | The identifier in the specified data source that will identify this flight. | string |
 
-**Example 1: Retry not required**
+    {
+        "method": "adsb",
+        "ident": "4840D6"
+    }
 
-	{
-		"flightId":"5a7f3377-b991-4cc8-af2d-379d57f786d1",
-		"sequenceNumber":1,
-		"timeStamp":"2018-08-15T14:29:08.842Z",
-		"version":"1.0.0",
-		"parts": {...},
-		"error": {
-			"errorDescription": "Server doesn't require sender to retry",
-			"shouldRetry": false
-		}
-		
-	}
+It is recognised that not all idents that a drone may be allocated will be available at the time of flight declaration. If a drone is allocated an ident it should update the flight declaration to include the new ident. It must not be treated as an error if the Interested Party does not recognise a method that is provided.
+
+### 4.4 operationMode enum
+
+| Datum | Description |
+| --- | --- |
+| **vlos** | The drone is being flown by a human pilot within visual line of sight |
+| **evlos** | The drone is being flown by a human pilot with extended visual line of sight – typically enabled by the use of observers. |
+| **bvlos** | The drone is being flown by a human pilot beyond visual line of sight |
+| **automated** | The drone does not have a human pilot |
+
+
 ### 4.3 flightPart 
+A flight consists of one or more parts and these parts must be declared as a GeoJSON FeatureCollection. Each part has a start and end time as well as a geography and maximum altitude. In addition to describing the the Geogrpahic area of operation in a Polygon or LineString format. The following properties must be declared for each format. 
+
+| Name | Description | Type |
+| --- | --- | --- |
+| **id** | An identifier that uniquely identifies this part within this flight. | string |
+| **geography** | A GeoJSON Feature Collection describing the planned operating area or route. | geometry |
+| **startTime** | The time that the flight is expected to start. | datetime |
+| **endTime** | The time that the flight is expected to be completed by. This must always be greater than startTime. | datetime |
+| **maxAltitude** | The maximum altitude that the drone will achieve during the _flightPart_. | altitude |
+| **minAltitude** | The minumum altitude that the drone will achieve during the _flightPart_. | altitude |
+
 
 	{
 			"type": "FeatureCollection",
@@ -356,17 +386,7 @@ It is expected that a future version of this specification will include a teleme
 			]
 	}
 
-A flight consists of one or more parts and these parts must be declared as a GeoJSON FeatureCollection. Each part has a start and end time as well as a geography and maximum altitude. In addition to describing the the Geogrpahic area of operation in a Polygon or LineString format. The following properties must be declared for each format. 
-
-| Name | Description | Type |
-| --- | --- | --- |
-| **id** | An identifier that uniquely identifies this part within this flight. | string |
-| **geography** | A GeoJSON Feature Collection describing the planned operating area or route. | geometry |
-| **startTime** | The time that the flight is expected to start. | datetime |
-| **endTime** | The time that the flight is expected to be completed by. This must always be greater than startTime. | datetime |
-| **maxAltitude** | The maximum altitude that the drone will achieve during the _flightPart_. | altitude |
-| **minAltitude** | The minumum altitude that the drone will achieve during the _flightPart_. | altitude |
-
+#### 4.3.1 Notes
 - No parts of a declared flight can have overlapping start and end times.
 - For geography, a _FeatureCollection_ is to be used to describe :
   - _Polygon_ is used to define the area where a drone is expected to operate. When the geography is a _Polygon_, multiple linear rings representing the exterior ring (and optionally 'holes') should be supported. This allows the geography to define parts of the area where the drone will not operate.
@@ -374,34 +394,8 @@ A flight consists of one or more parts and these parts must be declared as a Geo
   - No other GeoJSON types are supported.
   - For version 1.0 of the specification, neither sps nor amsl are supported datums for maxAltitude or minAltitude
 
-   
-#### 4.3.1 ident
 
-To allow a flight to be correlated with positional data from other sources (e.g. ADSB or RADAR) a flight declaration can 
-include one or more _idents_ that will be associated with this flight.
-
-| Name | Description | Type |
-| --- | --- | --- |
-| **method** | The name of the technology providing the ident | string { "adsb", "flarm" } |
-| **ident** | The identifier in the specified data source that will identify this flight. | string |
-
-    {
-        "method": "adsb",
-        "ident": "4840D6"
-    }
-
-It is recognised that not all idents that a drone may be allocated will be available at the time of flight declaration. If a drone is allocated an ident it should update the flight declaration to include the new ident. It must not be treated as an error if the Interested Party does not recognise a method that is provided.
-
-### 4.4 operationMode enum
-
-| Datum | Description |
-| --- | --- |
-| **vlos** | The drone is being flown by a human pilot within visual line of sight |
-| **evlos** | The drone is being flown by a human pilot with extended visual line of sight – typically enabled by the use of observers. |
-| **bvlos** | The drone is being flown by a human pilot beyond visual line of sight |
-| **automated** | The drone does not have a human pilot |
-
-### 4.5 altitudeDatum enum
+#### 4.3.2 altitudeDatum enum
 
 This specification defines the following altitude datums, however specific messages may not allow altitudes to be defined using certain datums (e.g. it makes no sense to declare the maximum altitude of a pre-planned very low altitude flight relative to the SPS datum). The following string values are supported for datums effectively creating an enumeration.
 
@@ -418,6 +412,31 @@ An altitude 152.4 metres above ground level would be represented by the followin
         "metres": 152.4,
         "datum": "agl"
     }
+
+
+#### 4.6 error
+
+
+| Name | Description | Type |
+| --- | --- | --- |
+| **errorDescription** | A human-readable description of what the error was. | string |
+| **shouldRetry** | A flag to indicate that the whether the message should be queued for resending. | bool |
+| **paramName** | If the error was caused due to validation failure, the name of the parameter should be provided in this field. | string _[optional]_ |
+
+**Example 1: Retry not required**
+
+	{
+		"flightId":"5a7f3377-b991-4cc8-af2d-379d57f786d1",
+		"sequenceNumber":1,
+		"timeStamp":"2018-08-15T14:29:08.842Z",
+		"version":"1.0.0",
+		"parts": {...},
+		"error": {
+			"errorDescription": "Server doesn't require sender to retry",
+			"shouldRetry": false
+		}
+		
+	}
 
 ## 5 Standard Concepts
 
