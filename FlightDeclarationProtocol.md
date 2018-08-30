@@ -130,6 +130,8 @@ The following areas are regarded as out of scope from this specification, as the
 		"originatingParty":"Originating Party, Inc.",
 		"contactUrl":"https://utm.originatingparty.com/contact?d6c8cec9-2d57-43f6-8301-53efee5702b4",
 		"operationMode":"vlos",
+		"vehicleId": "157de9bb-6b49-496b-bf3f-0b768ce6a3b6",
+		"operatorId": "4a725cb5-02d2-4f78-888f-b93088d324be",
 		"actualTakeOffTime" : "2018-08-04T22:44:30.652Z",
 		"actualLandingTime" : "2018-08-30T14:51:10.802773Z"
 	}
@@ -213,6 +215,8 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 		"originatingParty": "Originating Party, Inc.",
 		"contactUrl": "https://utm.originatingparty.com/contact?5a7f3377-b991-4cc8-af2d-379d57f786d1",
 		"operationMode": "bvlos",
+		"vehicleId": "157de9bb-6b49-496b-bf3f-0b768ce6a3b6",
+		"operatorId": "4a725cb5-02d2-4f78-888f-b93088d324be",
 		"idents": [
 		{
 			"method": "adsb",
