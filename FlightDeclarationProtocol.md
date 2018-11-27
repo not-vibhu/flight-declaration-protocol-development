@@ -8,9 +8,9 @@
 	- [3 Example Declarations](#3-example-declarations)
 	- [4 Details](#4-details)
 		- [4.1 message](#41-message)
-		- [4.2 flightDeclaration](#42-flightdeclaration)
+		- [4.2 flight_declaration](#42-flightdeclaration)
 			- [4.3 idents](#43-idents)
-		- [4.4 operationMode enum](#44-operationmode-enum)
+		- [4.4 operation_mode enum](#44-operationmode-enum)
 		- [4.3 flightPart](#43-flightpart)
 			- [4.3.1 Notes](#431-notes)
 			- [4.3.2 altitudeDatum enum](#432-altitudedatum-enum)
@@ -73,28 +73,28 @@ The following areas are regarded as out of scope from this specification, as the
 
 	{
 	"exchange_type":"flight_declaration",
-	"flightId": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
-	"planId": "05ccbdc5-81cd-4da4-aaf9-50feb3d3673c",
-	"flightState":2,
-	"flightApproved":0,
-	"flightCompleted":1,
-	"sequenceNumber":0,
-	"timeStamp":"2018-08-15T14:29:08.842Z",
+	"flight_id": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
+	"plan_id": "05ccbdc5-81cd-4da4-aaf9-50feb3d3673c",
+	"flight_state":2,
+	"flight_approved":0,
+	"flight_completed":1,
+	"sequence_number":0,
+	"time_stamp":"2018-08-15T14:29:08.842Z",
 	"version":"1.0.0",
-	"flightDeclaration":{
+	"flight_declaration":{
 		"parts":{
 			"type":"FeatureCollection",
 			"features":[
 				{
 				"type":"Feature",
 				"properties":{
-					"startTime":"2017-02-01T15:00:00+00:00",
-					"endTime":"2017-02-01T15:30:00+00:00",
-					"maxAlt":{
+					"start_time":"2017-02-01T15:00:00+00:00",
+					"end_time":"2017-02-01T15:30:00+00:00",
+					"max_altitude":{
 						"metres":152.4,
 						"datum":"agl"
 					},
-					"minAlt":{
+					"min_altitude":{
 						"metres":132.0,
 						"datum":"agl"
 					}
@@ -130,14 +130,14 @@ The following areas are regarded as out of scope from this specification, as the
 			]
 		},
 		"purpose":"Agricultural survey",
-		"expectTelemetry":false,
-		"originatingParty":"Originating Party, Inc.",
-		"contactUrl":"https://utm.originatingparty.com/contact?d6c8cec9-2d57-43f6-8301-53efee5702b4",
-		"operationMode":"vlos",
-		"vehicleId": "157de9bb-6b49-496b-bf3f-0b768ce6a3b6",
-		"operatorId": "4a725cb5-02d2-4f78-888f-b93088d324be",
-		"actualTakeOffTime" : "2018-08-04T22:44:30.652Z",
-		"actualLandingTime" : "2018-08-30T14:51:10.802773Z"
+		"expect_telemetry":false,
+		"originating_party":"Originating Party, Inc.",
+		"contact_url":"https://utm.originatingparty.com/contact?d6c8cec9-2d57-43f6-8301-53efee5702b4",
+		"operation_mode":"vlos",
+		"vehicle_id": "157de9bb-6b49-496b-bf3f-0b768ce6a3b6",
+		"operator_id": "4a725cb5-02d2-4f78-888f-b93088d324be",
+		"actual_take_off_time" : "2018-08-04T22:44:30.652Z",
+		"actual_landing_time" : "2018-08-30T14:51:10.802773Z"
 	}
 	}
 
@@ -146,15 +146,15 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 
 	{
 	"exchange_type":"flight_declaration",
-	"flightId": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
-	"planId": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
-	"flightState":2,
-	"flightApproved":0,
-	"flightCompleted":1,
-	"sequenceNumber": 0,
-	"timeStamp": "2018-08-15T14:29:08.842Z",
+	"flight_id": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
+	"plan_id": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
+	"flight_state":2,
+	"flight_approved":0,
+	"flight_completed":1,
+	"sequence_number": 0,
+	"time_stamp": "2018-08-15T14:29:08.842Z",
 	"version": "1.0.0",
-	"flightDeclaration": {
+	"flight_declaration": {
 		"parts": {
 		"type": "FeatureCollection",
 		"features": [
@@ -162,13 +162,13 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 			"type": "Feature",
 			"properties": {
 				"id": "0",
-				"startTime": "2017-02-01T15:00:00+00:00",
-				"endTime": "2017-02-01T15:30:00+00:00",
-				"maxAlt": {
+				"start_time": "2017-02-01T15:00:00+00:00",
+				"end_time": "2017-02-01T15:30:00+00:00",
+				"max_altitude": {
 				"metres": 152.4,
 				"datum": "agl"
 				},
-				"minAlt": {
+				"min_altitude": {
 				"metres": 102.4,
 				"datum": "agl"
 				}
@@ -191,13 +191,13 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 			"type": "Feature",
 			"properties": {
 				"id": "1",
-				"startTime": "2017-02-01T16:00:00+00:00",
-				"endTime": "2017-02-01T16:30:00+00:00",
-				"maxAlt": {
+				"start_time": "2017-02-01T16:00:00+00:00",
+				"end_time": "2017-02-01T16:30:00+00:00",
+				"max_altitude": {
 				"metres": 152.4,
 				"datum": "agl"
 				},
-				"minAlt": {
+				"min_altitude": {
 				"metres": 102.4,
 				"datum": "agl"
 				}
@@ -219,20 +219,20 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 		]
 		},
 		"purpose": "Delivery",
-		"expectTelemetry": true,
-		"originatingParty": "Originating Party, Inc.",
-		"contactUrl": "https://utm.originatingparty.com/contact?5a7f3377-b991-4cc8-af2d-379d57f786d1",
-		"operationMode": "bvlos",
-		"vehicleId": "157de9bb-6b49-496b-bf3f-0b768ce6a3b6",
-		"operatorId": "4a725cb5-02d2-4f78-888f-b93088d324be",
+		"expect_telemetry": true,
+		"originating_party": "Originating Party, Inc.",
+		"contact_url": "https://utm.originatingparty.com/contact?5a7f3377-b991-4cc8-af2d-379d57f786d1",
+		"operation_mode": "bvlos",
+		"vehicle_id": "157de9bb-6b49-496b-bf3f-0b768ce6a3b6",
+		"operator_id": "4a725cb5-02d2-4f78-888f-b93088d324be",
 		"idents": [
 		{
 			"method": "adsb",
 			"ident": "4840D6"
 		}
 		],
-		"actualTakeOffTime" : "2018-08-04T22:44:30.652Z",
-		"actualLandingTime" : "2018-08-30T14:51:10.802773Z"
+		"actual_take_off_time" : "2018-08-04T22:44:30.652Z",
+		"actual_landing_time" : "2018-08-30T14:51:10.802773Z"
 	}
 	}
 
@@ -243,44 +243,44 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 The primary entity exchanged between Originating and Interested Parties.
 
 	{
-		"flightId": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
-		"planId": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
-		"sequenceNumber": 0,
-		"timeStamp":"2018-08-15T14:29:08.842Z",
-		"flightDeclaration": { ... },
+		"flight_id": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
+		"plan_id": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
+		"sequence_number": 0,
+		"time_stamp":"2018-08-15T14:29:08.842Z",
+		"flight_declaration": { ... },
 		"version": "1.0.0"
 	}
 
 | Name | Description | Type |
 | --- | --- | --- |
 | **exchange_type** | Specify the type of exchange . At the moment only allowed type is flight_declaration | string |
-| **flightId** | Identifier provided by the Originating Party that uniquely identifies this declaration from other declarations provided by the same Originating Party. | string |
-| **planId** | Identifier provided by the Originating Party that uniquely identifies this declaration as a part of a flight plan. | string |
-| **sequenceNumber** | **(optional)** A number that represents the version of this message data. When a record is modified, the sequence number must be numerically greater than the previous update. | number (uint64) |
-| **timeStamp** |  **ISO-8601** **[[5]](#Ref-5)** formatting standard. Local times are not supported; all times must be in UTC or have a time zone offset specified. | YYYY-MM-DDTHH:mm:ss.sssZ |
-| **flightDeclaration** | A flightDeclaration object describing this proposed flight. To delete a flight, this field should be null. | flightDeclaration |
+| **flight_id** | Identifier provided by the Originating Party that uniquely identifies this declaration from other declarations provided by the same Originating Party. | string |
+| **plan_id** | Identifier provided by the Originating Party that uniquely identifies this declaration as a part of a flight plan. | string |
+| **sequence_number** | **(optional)** A number that represents the version of this message data. When a record is modified, the sequence number must be numerically greater than the previous update. | number (uint64) |
+| **time_stamp** |  **ISO-8601** **[[5]](#Ref-5)** formatting standard. Local times are not supported; all times must be in UTC or have a time zone offset specified. | YYYY-MM-DDTHH:mm:ss.sssZ |
+| **flight_declaration** | A flight_declaration object describing this proposed flight. To delete a flight, this field should be null. | flight_declaration |
 | **version** | The version of this protocol that the message has been implemented from. | string - currently "0.2.0" |
-| **flightState** | The state of the flight at the given timeStamp 0 - proposed, 1 - active, 2 - completed | integer |
-| **flightApproved** | Is the flight approved at the given timeStamp 0 - False, 1 - True | integer |
-| **flightCompleted** | Is the flight completed at the given timeStamp 0 - False, 1 - True. | integer |
+| **flight_state** | The state of the flight at the given time_stamp 0 - proposed, 1 - active, 2 - completed | integer |
+| **flight_approved** | Is the flight approved at the given time_stamp 0 - False, 1 - True | integer |
+| **flight_completed** | Is the flight completed at the given time_stamp 0 - False, 1 - True. | integer |
 
-### 4.2 flightDeclaration
+### 4.2 flight_declaration
 
 	{
 			"parts": {...},
 			"purpose": "Delivery",
-			"expectTelemetry": true,
-			"originatingParty": "Originating Party, Inc.",
-			"contactUrl": "https://utm.originatingparty.com/contact?5a7f3377-b991-4cc8-af2d-379d57f786d1",
-			"operationMode": "bvlos",
+			"expect_telemetry": true,
+			"originating_party": "Originating Party, Inc.",
+			"contact_url": "https://utm.originatingparty.com/contact?5a7f3377-b991-4cc8-af2d-379d57f786d1",
+			"operation_mode": "bvlos",
 			"idents": [
 					{
 						"method": "adsb",
 						"ident": "4840D6"
 					}
 			]
-			"actualTakeOffTime" : "2018-08-04T22:44:30.652Z",
-			"actualLandingTime" : "2018-08-30T14:51:10.802773Z"
+			"actual_take_off_time" : "2018-08-04T22:44:30.652Z",
+			"actual_landing_time" : "2018-08-30T14:51:10.802773Z"
 	}
 
 
@@ -288,13 +288,13 @@ The primary entity exchanged between Originating and Interested Parties.
 | --- | --- | --- |
 | **parts** | One or more part that make up this flight | GeoJSON FeatureCollection |
 |**purpose** | A human readable description of the reason the flight is being conducted. This field can be omitted if the end user chooses not to share the purpose of their flight. (_See notes_)| string |
-| **expectTelemetry** | A flag indicting whether it is expected that telemetry will be available during the flight. | boolean |
-| **originatingParty** | The name of the party that the flight was originally declared with. | string |
-| **contactUrl** | The URL to be use to initiate contact with the user. This can be used to make nuisance report about this flight or for law enforcement to start the process of identifying a drone operator. It is expected that the flightId will be used as part of this Url as the Url must be standalone and not require any other information. | string |
-| **operationMode** | The mode that the drone is being operated in. | operationMode { "vlos", "evlos", "bvlos", "automated" } |
+| **expect_telemetry** | A flag indicting whether it is expected that telemetry will be available during the flight. | boolean |
+| **originating_party** | The name of the party that the flight was originally declared with. | string |
+| **contact_url** | The URL to be use to initiate contact with the user. This can be used to make nuisance report about this flight or for law enforcement to start the process of identifying a drone operator. It is expected that the flight_id will be used as part of this Url as the Url must be standalone and not require any other information. | string |
+| **operation_mode** | The mode that the drone is being operated in. | operation_mode { "vlos", "evlos", "bvlos", "automated" } |
 | **idents** | Any idents that are associated with this flight | array _[optional]_ |
-| **actualTakeOffTime** | The time the flight took off. This value can be null or omitted if the take-off time is not known | datetime _[optional]_ |
-| **actualLandingTime** | The time the flight completed. This value can be null or omitted if the landing time is not known | datetime _[optional]_ |
+| **actual_take_off_time** | The time the flight took off. This value can be null or omitted if the take-off time is not known | datetime _[optional]_ |
+| **actual_landing_time** | The time the flight completed. This value can be null or omitted if the landing time is not known | datetime _[optional]_ |
 
 It is expected that a future version of this specification will include a telemetryEndPoint field. This is an endpoint that an interest party would be able to call to get live telemetry while the flight was in progress.
 
@@ -317,7 +317,7 @@ include one or more _idents_ that will be associated with this flight.
 
 It is recognised that not all idents that a drone may be allocated will be available at the time of flight declaration. If a drone is allocated an ident it should update the flight declaration to include the new ident. It must not be treated as an error if the Interested Party does not recognise a method that is provided.
 
-### 4.4 operationMode enum
+### 4.4 operation_mode enum
 
 | Datum | Description |
 | --- | --- |
@@ -334,10 +334,10 @@ A flight consists of one or more parts and these parts must be declared as a Geo
 | --- | --- | --- |
 | **id** | An identifier that uniquely identifies this part within this flight. | string |
 | **geography** | A GeoJSON Feature Collection describing the planned operating area or route. | geometry |
-| **startTime** | The time that the flight is expected to start. | datetime |
-| **endTime** | The time that the flight is expected to be completed by. This must always be greater than startTime. | datetime |
-| **maxAltitude** | The maximum altitude that the drone will achieve during the _flightPart_. | altitude |
-| **minAltitude** | The minumum altitude that the drone will achieve during the _flightPart_. | altitude |
+| **start_time** | The time that the flight is expected to start. | datetime |
+| **end_time** | The time that the flight is expected to be completed by. This must always be greater than start_time. | datetime |
+| **max_altitude** | The maximum altitude that the drone will achieve during the _flightPart_. | altitude |
+| **min_altitude** | The minumum altitude that the drone will achieve during the _flightPart_. | altitude |
 
 
 	{
@@ -347,13 +347,13 @@ A flight consists of one or more parts and these parts must be declared as a Geo
 				"type": "Feature",
 				"properties": {
 					"id": "0",
-					"startTime": "2017-02-01T15:00:00+00:00",
-					"endTime": "2017-02-01T15:30:00+00:00",
-					"maxAlt": {
+					"start_time": "2017-02-01T15:00:00+00:00",
+					"end_time": "2017-02-01T15:30:00+00:00",
+					"max_altitude": {
 						"metres": 152.4,
 						"datum": "agl"
 					},
-					"minAlt": {
+					"min_altitude": {
 						"metres": 102.4,
 						"datum": "agl"
 					}
@@ -376,13 +376,13 @@ A flight consists of one or more parts and these parts must be declared as a Geo
 				"type": "Feature",
 				"properties": {
 					"id": "1",
-					"startTime": "2017-02-01T16:00:00+00:00",
-					"endTime": "2017-02-01T16:30:00+00:00",
-					"maxAlt": {
+					"start_time": "2017-02-01T16:00:00+00:00",
+					"end_time": "2017-02-01T16:30:00+00:00",
+					"max_altitude": {
 						"metres": 152.4,
 						"datum": "agl"
 					},
-					"minAlt": {
+					"min_altitude": {
 						"metres": 102.4,
 						"datum": "agl"
 					}
@@ -410,7 +410,7 @@ A flight consists of one or more parts and these parts must be declared as a Geo
   - _Polygon_ is used to define the area where a drone is expected to operate. When the geography is a _Polygon_, multiple linear rings representing the exterior ring (and optionally 'holes') should be supported. This allows the geography to define parts of the area where the drone will not operate.
   - _LineString_ should be used when there is a defined route that the drone is expected to follow. When the geography is a _LineString_, it may have more than two points.
   - No other GeoJSON types are supported.
-  - For version 1.0 of the specification, neither sps nor amsl are supported datums for maxAltitude or minAltitude
+  - For version 1.0 of the specification, neither sps nor amsl are supported datums for max_altitude or min_altitude
 
 
 #### 4.3.2 altitudeDatum enum
@@ -437,22 +437,22 @@ An altitude 152.4 metres above ground level would be represented by the followin
 
 | Name | Description | Type |
 | --- | --- | --- |
-| **errorDescription** | A human-readable description of what the error was. | string |
-| **shouldRetry** | A flag to indicate that the whether the message should be queued for resending. | bool |
-| **paramName** | If the error was caused due to validation failure, the name of the parameter should be provided in this field. | string _[optional]_ |
+| **error_description** | A human-readable description of what the error was. | string |
+| **should_retry** | A flag to indicate that the whether the message should be queued for resending. | bool |
+| **param_name** | If the error was caused due to validation failure, the name of the parameter should be provided in this field. | string _[optional]_ |
 
 **Example 1: Retry not required**
 
 	{
-		"flightId":"5a7f3377-b991-4cc8-af2d-379d57f786d1",
-		"planId": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
-		"sequenceNumber":1,
-		"timeStamp":"2018-08-15T14:29:08.842Z",
+		"flight_id":"5a7f3377-b991-4cc8-af2d-379d57f786d1",
+		"plan_id": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
+		"sequence_number":1,
+		"time_stamp":"2018-08-15T14:29:08.842Z",
 		"version":"1.0.0",
 		"parts": {...},
 		"error": {
-			"errorDescription": "Server doesn't require sender to retry",
-			"shouldRetry": false
+			"error_description": "Server doesn't require sender to retry",
+			"should_retry": false
 		}
 		
 	}
@@ -494,13 +494,13 @@ When a Flight Declaration is updated by an Originating Party, that _entire_ Flig
 
 ### 5.6 Timestamp and Sequence Number
 
-To account for the possibility of messages being delivered out-of-order, a combination of timestamp and sequence number must be used. A timestamp of the creation of the message must be added at every declaration. When a flight declaration is updated, the sequence number must also be increased to make it numerically greater than the previous update. This allows the receiver to ensure that they are not overwriting more recent data if they process a delayed update message. The timestamp and the sequence numeber used in combination serve as the primary method of verification of sequence. The timestamp should be considered a **primary** method while the sequence number should be considered as a **secondary** form of verification. 
+To account for the possibility of messages being delivered out-of-order, a combination of time_stamp and sequence number must be used. A time_stamp of the creation of the message must be added at every declaration. When a flight declaration is updated, the sequence number must also be increased to make it numerically greater than the previous update. This allows the receiver to ensure that they are not overwriting more recent data if they process a delayed update message. The time_stamp and the sequence numeber used in combination serve as the primary method of verification of sequence. The time_stamp should be considered a **primary** method while the sequence number should be considered as a **secondary** form of verification. 
 
 Sequence numbers do not have to be consecutive, nor do they need to start from zero, however they do need to be an unsigned integer – i.e. a whole number greater than or equal to zero.
 
 ### 5.7 Deletion
 
-To delete a Flight Declaration a null flightDeclaration element should be sent in the [message](#message). The flightId must be provided and the sequence number increased. It is regarded as invalid to update a previously deleted record, once a flight declaration is deleted it must not be re-activated.
+To delete a Flight Declaration a null flight_declaration element should be sent in the [message](#message). The flight_id must be provided and the sequence number increased. It is regarded as invalid to update a previously deleted record, once a flight declaration is deleted it must not be re-activated.
 
 ## 6 References
 |||
