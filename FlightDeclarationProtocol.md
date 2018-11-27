@@ -11,7 +11,7 @@
 		- [4.4 operation_mode enum](#44-operationmode-enum)
 		- [4.3 flightPart](#43-flightpart)
 			- [4.3.1 Notes](#431-notes)
-			- [4.3.2 altitudeDatum enum](#432-altitudedatum-enum)
+			- [4.3.2 Altitude Datum enum](#432-altitude-datum-enum)
 			- [4.6 error](#46-error)
 	- [5 Standard Concepts](#5-standard-concepts)
 		- [5.1 Dates & Times](#51-dates--times)
@@ -390,7 +390,7 @@ A flight consists of one or more parts and these parts must be declared as a Geo
   - For version 1.0 of the specification, neither sps nor amsl are supported datums for max_altitude or min_altitude
 
 
-#### 4.3.2 altitudeDatum enum
+#### 4.3.2 Altitude Datum enum
 
 This specification defines the following altitude datums, however specific messages may not allow altitudes to be defined using certain datums (e.g. it makes no sense to declare the maximum altitude of a pre-planned very low altitude flight relative to the SPS datum). The following string values are supported for datums effectively creating an enumeration.
 
