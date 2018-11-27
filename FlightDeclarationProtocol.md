@@ -74,6 +74,9 @@ The following areas are regarded as out of scope from this specification, as the
 	{
 	"flightId": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
 	"planId": "05ccbdc5-81cd-4da4-aaf9-50feb3d3673c",
+	"flightState":2,
+	"flightApproved":0,
+	"flightCompleted":1,
 	"sequenceNumber":0,
 	"timeStamp":"2018-08-15T14:29:08.842Z",
 	"version":"1.0.0",
@@ -143,6 +146,9 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 	{
 	"flightId": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
 	"planId": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
+	"flightState":2,
+	"flightApproved":0,
+	"flightCompleted":1,
 	"sequenceNumber": 0,
 	"timeStamp": "2018-08-15T14:29:08.842Z",
 	"version": "1.0.0",
@@ -251,6 +257,9 @@ The primary entity exchanged between Originating and Interested Parties.
 | **timeStamp** |  **ISO-8601** **[[5]](#Ref-5)** formatting standard. Local times are not supported; all times must be in UTC or have a time zone offset specified. | YYYY-MM-DDTHH:mm:ss.sssZ |
 | **flightDeclaration** | A flightDeclaration object describing this proposed flight. To delete a flight, this field should be null. | flightDeclaration |
 | **version** | The version of this protocol that the message has been implemented from. | string - currently "0.2.0" |
+| **flightState** | The state of the flight at the given timeStamp 0 - proposed, 1 - active, 2 - completed | integer |
+| **flightApproved** | Is the flight approved at the given timeStamp 0 - False, 1 - True | integer |
+| **flightCompleted** | Is the flight completed at the given timeStamp 0 - False, 1 - True. | integer |
 
 ### 4.2 flightDeclaration
 
@@ -505,6 +514,7 @@ To delete a Flight Declaration a null flightDeclaration element should be sent i
 
 | Version | Date | Comments |
 | --- | --- | --- |
+| 0.2.3-draft | 26/11/18 | Added additional fields for flight state |
 | 0.2.2-draft | 01/07/18 | Refactor to remove significant portions  |
 | 0.2.1-draft | 01/07/18 | Revisions from GUTMA |
 | 0.1.0-draft | 01/09/16 | Initial draft specification by Altitude Angel |
