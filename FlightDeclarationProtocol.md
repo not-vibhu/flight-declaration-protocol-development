@@ -4,7 +4,6 @@
 	- [1 Introduction](#1-introduction)
 	- [2 Definitions and Scope](#2-definitions-and-scope)
 		- [2.1 Definitions](#21-definitions)
-		- [2.2 Out of Scope](#22-out-of-scope)
 	- [3 Example Declarations](#3-example-declarations)
 	- [4 Details](#4-details)
 		- [4.1 message](#41-message)
@@ -46,25 +45,6 @@ In this specification, we introduce and propose the following definitions:
 | User/Pilot | The party declaring the flight (i.e. a customer of an Originating Party). |
 | Very low altitude | Describes the airspace below which General Aviation is not permitted to operate – typically below 500 feet AGL. |
 
-### 2.2 Out of Scope
-
-The following areas are regarded as out of scope from this specification, as their definition will necessarily depend on implementing parties' business models they are effectively implementation details, where practical, the authors have attempted to address any "out of scope" items by providing prototype implementations  that early adopters/testers of this specification can use to practically  verify the suitability of this protocol against its objectives.
-
-- It is not the primary concern of each individual UTM Provider to build reliable, distributed infrastructure to facilitate the exchange of flight data between competing providers, however it is recognized that access to such data would enhance the proposition of Interested Parties;
-
-- The number of drone flights is set to rise dramatically over the coming years, and as such not every UTM Provider will have the capability and/or desire to implement a notification-based geospatial system.
-
-- Many UTM Providers will either not want to, or be unable to, invest the significant time required in building systems which can compute the air-situation picture as changes occur in real-time and would prefer to receive computed data, rather than poll for it.
-
-- The mechanism where interested parties subscribe for updates. This specification does not define a programmatic method to subscribe to notifications. The expectation is that the Interested and Originating parties will either have a commercial relationship or use a common software (e.g. InterUSS) to query the data. 
-
-- The authors note there are some implementation challenges associated with a point-to-point implementation of this protocol, notably:
-
-- Interested Parties need seek, identify and establish commercial relationships with each UTM Provider operating within a specific geographic region
-
-- Originating Parties need maintain separate systems and commercial relationships with a changing (growing) list of Interested Parties.
-
-- The protocol recommends – but does not presently mandate – that the parties perform verification of each message. It is expected that this could take the form of a cryptographically-signed hash included as part of the HTTP headers.
 
 ## 3 Example Declarations
 
