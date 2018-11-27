@@ -72,6 +72,7 @@ The following areas are regarded as out of scope from this specification, as the
 **Example 1:** A VLOS survey flight with a polygonal area of operation.
 
 	{
+	"exchange_type":"flight_declaration",
 	"flightId": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
 	"planId": "05ccbdc5-81cd-4da4-aaf9-50feb3d3673c",
 	"flightState":2,
@@ -144,6 +145,7 @@ The following areas are regarded as out of scope from this specification, as the
 after the return leg. This drone is expecting to provide telemetry during the flight
 
 	{
+	"exchange_type":"flight_declaration",
 	"flightId": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
 	"planId": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
 	"flightState":2,
@@ -251,6 +253,7 @@ The primary entity exchanged between Originating and Interested Parties.
 
 | Name | Description | Type |
 | --- | --- | --- |
+| **exchange_type** | Specify the type of exchange . At the moment only allowed type is flight_declaration | string |
 | **flightId** | Identifier provided by the Originating Party that uniquely identifies this declaration from other declarations provided by the same Originating Party. | string |
 | **planId** | Identifier provided by the Originating Party that uniquely identifies this declaration as a part of a flight plan. | string |
 | **sequenceNumber** | **(optional)** A number that represents the version of this message data. When a record is modified, the sequence number must be numerically greater than the previous update. | number (uint64) |
