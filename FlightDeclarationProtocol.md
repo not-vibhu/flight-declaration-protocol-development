@@ -2,8 +2,7 @@
 
 - [UAV/Operator Flight Declaration Exchange Protocol](#uavoperator-flight-declaration-exchange-protocol)
 	- [1 Introduction](#1-introduction)
-	- [2 Definitions and Scope](#2-definitions-and-scope)
-		- [2.1 Definitions](#21-definitions)
+	- [2 Definitions](#2-definitions)
 	- [3 Example Declarations](#3-example-declarations)
 	- [4 Details](#4-details)
 		- [4.1 message](#41-message)
@@ -29,9 +28,7 @@
 ## 1 Introduction
 _A protocol designed to facilitate the secure exchange of flight situation data between UTM Providers, while allowing each UTM Provider to retain ownership of their customer data._
 
-## 2 Definitions and Scope
-
-### 2.1 Definitions
+## 2 Definitions
 
 In this specification, we introduce and propose the following definitions:
 
