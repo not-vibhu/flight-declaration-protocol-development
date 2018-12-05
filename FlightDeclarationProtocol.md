@@ -46,7 +46,7 @@ In this specification, we introduce and propose the following definitions:
 ## 3 Example Declarations
 
 
-**Example 1:** A VLOS survey flight with a polygonal area of operation.
+**Example 1:** A VLOS survey flight with a polygonal area of operation sent after the fact.
 
 	{
 	"exchange_type":"flight_declaration",
@@ -56,7 +56,7 @@ In this specification, we introduce and propose the following definitions:
 	"flight_approved":0,
 	"flight_completed":1,
 	"sequence_number":0,
-	"time_stamp":"2018-08-15T14:29:08.842Z",
+	"time_stamp":"2018-08-15T15:29:08.842Z",
 	"version":"1.0.0",
 	"flight_declaration":{
 		"parts":{
@@ -65,8 +65,8 @@ In this specification, we introduce and propose the following definitions:
 				{
 				"type":"Feature",
 				"properties":{
-					"start_time":"2017-02-01T15:00:00+00:00",
-					"end_time":"2017-02-01T15:30:00+00:00",
+					"start_time":"2018-08-15T15:00:00+00:00",
+					"end_time":"2018-08-15T15:30:00+00:00",
 					"max_altitude":{
 						"metres":152.4,
 						"datum":"agl"
@@ -113,8 +113,8 @@ In this specification, we introduce and propose the following definitions:
 		"operation_mode":"vlos",
 		"vehicle_id": "157de9bb-6b49-496b-bf3f-0b768ce6a3b6",
 		"operator_id": "4a725cb5-02d2-4f78-888f-b93088d324be",
-		"actual_take_off_time" : "2018-08-04T22:44:30.652Z",
-		"actual_landing_time" : "2018-08-30T14:51:10.802773Z"
+		"actual_take_off_time" : "2018-08-15T15:05:30.652Z",
+		"actual_landing_time" : "2018-08-16T15:21:10.802773Z"
 	}
 	}
 
@@ -139,8 +139,8 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 			"type": "Feature",
 			"properties": {
 				"id": "0",
-				"start_time": "2017-02-01T15:00:00+00:00",
-				"end_time": "2017-02-01T15:30:00+00:00",
+				"start_time": "2018-08-15T15:00:00+00:00",
+				"end_time": "2017-08-15T15:30:00+00:00",
 				"max_altitude": {
 				"metres": 152.4,
 				"datum": "agl"
@@ -168,8 +168,8 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 			"type": "Feature",
 			"properties": {
 				"id": "1",
-				"start_time": "2017-02-01T16:00:00+00:00",
-				"end_time": "2017-02-01T16:30:00+00:00",
+				"start_time": "2018-08-15T16:00:00+00:00",
+				"end_time": "2018-08-15T16:30:00+00:00",
 				"max_altitude": {
 				"metres": 152.4,
 				"datum": "agl"
@@ -207,9 +207,7 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 			"method": "adsb",
 			"ident": "4840D6"
 		}
-		],
-		"actual_take_off_time" : "2018-08-04T22:44:30.652Z",
-		"actual_landing_time" : "2018-08-30T14:51:10.802773Z"
+		]
 	}
 	}
 
