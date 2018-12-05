@@ -114,7 +114,7 @@ In this specification, we introduce and propose the following definitions:
 		"vehicle_id": "157de9bb-6b49-496b-bf3f-0b768ce6a3b6",
 		"operator_id": "4a725cb5-02d2-4f78-888f-b93088d324be",
 		"actual_take_off_time" : "2018-08-15T15:05:30.652Z",
-		"actual_landing_time" : "2018-08-16T15:21:10.802773Z"
+		"actual_landing_time" : "2018-08-15T15:21:10.802773Z"
 	}
 	}
 
