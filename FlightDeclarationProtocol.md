@@ -415,6 +415,7 @@ An altitude 152.4 metres above ground level would be represented by the followin
 | Name | Description | Type |
 | --- | --- | --- |
 | **error_description** | A human-readable description of what the error was. | string |
+| **error_type** | A type of error that was encountered: e.g. SchemaError, RangeError, etc. | string |
 | **should_retry** | A flag to indicate that the whether the message should be queued for resending. | bool |
 | **param_name** | If the error was caused due to validation failure, the name of the parameter should be provided in this field. | string _[optional]_ |
 
@@ -429,6 +430,7 @@ An altitude 152.4 metres above ground level would be represented by the followin
 		"parts": {...},
 		"error": {
 			"error_description": "Server doesn't require sender to retry",
+			"error_type": "SchemaError",
 			"should_retry": false
 		}
 		
