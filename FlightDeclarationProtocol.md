@@ -12,18 +12,22 @@
 		- [4.3 flightPart](#43-flightpart)
 			- [4.3.1 Notes](#431-notes)
 			- [4.3.2 Altitude Datum enum](#432-altitude-datum-enum)
-			- [4.6 error](#46-error)
-	- [5 Standard Concepts](#5-standard-concepts)
-		- [5.1 Dates & Times](#51-dates--times)
-		- [5.2 Geospatial Data](#52-geospatial-data)
-		- [5.3 Distances](#53-distances)
-		- [5.4 Flight Identifier](#54-flight-identifier)
-		- [5.5 Atomic updates](#55-atomic-updates)
-		- [5.6 Timestamp and Sequence Number](#56-timestamp-and-sequence-number)
-		- [5.7 Deletion](#57-deletion)
-	- [6 References](#6-references)
-	- [7 Revision History](#7-revision-history)
-	- [8 Attribution](#8-attribution)
+	- [5 Declaration Feedback](#5-declaration-feedback)
+		- [5.1 Technical errors](#51-technical-errors)
+		- [5.2 Validation errors](#52-validation-errors)
+		- [5.3 Refusals](#53-refusals)
+		- [5.4 Acceptances](#54-acceptances)
+	- [6 Standard Concepts](#6-standard-concepts)
+		- [6.1 Dates & Times](#61-dates--times)
+		- [6.2 Geospatial Data](#62-geospatial-data)
+		- [6.3 Distances](#63-distances)
+		- [6.4 Flight Identifier](#64-flight-identifier)
+		- [6.5 Atomic updates](#65-atomic-updates)
+		- [6.6 Timestamp and Sequence Number](#66-timestamp-and-sequence-number)
+		- [6.7 Deletion](#67-deletion)
+	- [7 References](#7-references)
+	- [8 Revision History](#8-revision-history)
+	- [9 Attribution](#9-attribution)
 
 ## 1 Introduction
 _A protocol designed to facilitate the secure exchange of flight situation data between UTM Providers, while allowing each UTM Provider to retain ownership of their customer data._
@@ -409,36 +413,132 @@ An altitude 152.4 metres above ground level would be represented by the followin
     }
 
 
-#### 4.6 error
+## 5 Declaration feedback
 
+The declaration feedback is the answer to a flight declaration.
+There are multiple types of feedback, each is identified by a feedback type.
+
+| Feedback Type | Description |
+| --- | --- |
+| "technical_error" | A low level technical error. Instances of these error all map to standard http errors. |
+| "validation_error" | A failure to respect the flight declaration schema. |
+| "refusal" | A refusal of the flight declaration with or without explanation. |
+| "acceptance" | An acceptance of the flight declaration, with or without remarks. |
+
+All technical errors and validation errors imply that the state of the receiver was not changed as a result of the failed declaration (this means that the declaration will need to be resent in order for it to be stored/processed by the receiver).
+All refusals and acceptances imply that the receiver stored the declaration and it can be referenced in the future (i.e. for reads and updates).
+
+### 5.1 Technical Errors
 
 | Name | Description | Type |
 | --- | --- | --- |
-| **error_description** | A human-readable description of what the error was. | string |
-| **error_type** | A type of error that was encountered: e.g. SchemaError, RangeError, etc. | string |
-| **should_retry** | A flag to indicate that the whether the message should be queued for resending. | bool |
-| **param_name** | If the error was caused due to validation failure, the name of the parameter should be provided in this field. | string _[optional]_ |
+| **http_error_code**| An http error code from the 300, 400 and 500 ranges of the http specification (https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml ) | number |
+| **message** | A descriptive, human-readable, non-normative description of the error. | string |
 
-**Example 1: Retry not required**
+**Example 1: Receiver internal error**
 
 	{
-		"flight_id":"5a7f3377-b991-4cc8-af2d-379d57f786d1",
-		"plan_id": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
-		"sequence_number":1,
-		"time_stamp":"2018-08-15T14:29:08.842Z",
-		"version":"1.0.0",
-		"parts": {...},
-		"error": {
-			"error_description": "Server doesn't require sender to retry",
-			"error_type": "SchemaError",
-			"should_retry": false
-		}
-		
+	"feedback_type": "technical_error",
+	"http_error_code": 500
+	"message": "Service encountered an internal problem, try again later"
 	}
 
-## 5 Standard Concepts
+**Example 2: Unauthorized**
 
-### 5.1 Dates & Times
+	{
+	"feedback_type":"technical_error",
+	"http_error_code": 401,
+	"message": "You are not authorized to submit flight declarations"
+	}
+	
+### 5.2 Validation Errors
+
+| Name | Description | Type |
+| --- | --- | --- |
+| **validation_message**| A validation failure message built according to the json-schema validation keywords ( https://json-schema.org/latest/json-schema-validation.html#rfc.section.6 ) | number |
+| **validation_path** | The json path pointing to the validation failure, in the form of a JSON Pointer ( https://tools.ietf.org/html/rfc6901 ) | string |
+	
+**Example 1: Missing field**
+	
+	{
+	"feedback_type":"validation_error",
+	"validation_message":"Required properties are missing from the object:time_stamp",
+	"validation_path","#/"
+	}
+	
+**Example 2: Value out of range, typo in first element of a feature collection array**
+
+	{
+	"feedback_type":"validation_error",
+	"validation_message":"Value 'Featured' is not defined in enum"
+	"validation_path","#/parts/features/0/type"
+	}
+	
+### 5.3 Refusals
+
+| Name | Description | Type |
+| --- | --- | --- |
+| **causes**| An optional array of causes containing json pointers (see 5.2 ) and plaintext explanations | array |
+
+**Example 1: Unexplained refusal**
+	
+	{
+	"feedback_type":"refusal",
+	}
+	
+**Example 2: Refusal due to high-altitude**
+
+	{
+	"feedback_type":"refusal",
+	"causes": [
+		{
+		"cause": "Max allowed altitude in this airspace: 150 meters",
+		"cause_path": "#/parts/features/1/properties/max_altitude"
+		}
+	]
+	}
+	
+**Example 3: Refusal due to unallowed night flight**
+
+	{
+	"feedback_type":"refusal",
+	"causes": [
+		{
+		"cause": "Flights not allowed after sundown",
+		"cause_path": "#/parts/features/0/properties/start_time"
+		},
+		{
+		"cause": "Flights not allowed after sundown",
+		"cause_path": "#/parts/features/0/properties/end_time"
+		},
+	]
+	}
+		  
+### 5.4 Acceptances
+
+| Name | Description | Type |
+| --- | --- | --- |
+| **remarks**| An optional array of causes containing plaintext guidance on constraints to the flight | array |
+
+**Example 1: Unconditional acceptance**
+
+	{
+	"feedback_type":"acceptance"
+	}
+
+**Example 2: Acceptance with notification**
+
+	{
+	"feedback_type":"acceptance"
+	"remarks": [
+		"Minimize noise on residential area",
+		"RC Airfield nearby"
+	]
+	}
+
+## 6 Standard Concepts
+
+### 6.1 Dates & Times
 
 Dates and times will follow the **ISO-8601** **[[5]](#Ref-5)** formatting standard. Local times are not supported; all times must be in UTC or have a time zone offset specified.
 
@@ -449,7 +549,7 @@ The requirement to specify times or dates does not apply to the specification, s
 
 No guarantees that a timezone offset will be preserved should be made.
 
-### 5.2 Geospatial Data
+### 6.2 Geospatial Data
 
 Geospatial data must be described using a geometry object as defined in the _GeoJSON_ specification [[6]](#Ref-6) with the following specific requirements:
 
@@ -459,29 +559,29 @@ Geospatial data must be described using a geometry object as defined in the _Geo
 
 Latitude and Longitude should not be specified to more than 8 decimal places. This gives an accuracy of approximately 1.1 mm at the equator making any further digits superfluous.
 
-### 5.3 Distances
+### 6.3 Distances
 
 All distances (both horizontal and vertical) are specified in metres.
 
-### 5.4 Flight Identifier
+### 6.4 Flight Identifier
 
 This is a unique identifier generated by the Originating Party that should provide an _anonymous_ identifier for this flight. The Originating Party must be able to use this identifier to identify the original records that resulted in this flight. Together with knowledge of who the Originating Party is, the flight identifier constitutes a globally unique identifier for this flight. i.e. Identifiers may be shared across originators, but the must be unique within an originator.
 
-### 5.5 Atomic updates
+### 6.5 Atomic updates
 
 When a Flight Declaration is updated by an Originating Party, that _entire_ Flight Declaration record will be sent. This allows the receiving service to replace the record in its entirety and allows the system to self-heal in the event of a missing message. This also removes the need to differentiate from a create and update – both are handled in the same way.
 
-### 5.6 Timestamp and Sequence Number
+### 6.6 Timestamp and Sequence Number
 
 To account for the possibility of messages being delivered out-of-order, a combination of time_stamp and sequence number must be used. A time_stamp of the creation of the message must be added at every declaration. When a flight declaration is updated, the sequence number must also be increased to make it numerically greater than the previous update. This allows the receiver to ensure that they are not overwriting more recent data if they process a delayed update message. The time_stamp and the sequence numeber used in combination serve as the primary method of verification of sequence. The time_stamp should be considered a **primary** method while the sequence number should be considered as a **secondary** form of verification. 
 
 Sequence numbers do not have to be consecutive, nor do they need to start from zero, however they do need to be an unsigned integer – i.e. a whole number greater than or equal to zero.
 
-### 5.7 Deletion
+### 6.7 Deletion
 
 To delete a Flight Declaration a null flight_declaration element should be sent in the [message](#message). The flight_id must be provided and the sequence number increased. It is regarded as invalid to update a previously deleted record, once a flight declaration is deleted it must not be re-activated.
 
-## 6 References
+## 7 References
 |||
 | --- | --- |
 | [1] | "RFC 2119: Key words for use in RFCs to Indicate Requirement Levels" - [https://www.ietf.org/rfc/rfc2119.txt](#https://www.ietf.org/rfc/rfc2119.txt) |
@@ -491,7 +591,7 @@ To delete a Flight Declaration a null flight_declaration element should be sent 
 | [5] | "ISO 8601 - Date and time format" - [http://www.iso.org/iso/home/standards/iso8601.htm](#http://www.iso.org/iso/home/standards/iso8601.htm) |
 | [6] | "RFC 7946: The GeoJSON Format" - [https://tools.ietf.org/html/rfc7946](#https://tools.ietf.org/html/rfc7946)|
 
-## 7 Revision History
+## 8 Revision History
 **REVISION HISTORY**
 
 | Version | Date | Comments |
@@ -503,7 +603,7 @@ To delete a Flight Declaration a null flight_declaration element should be sent 
 | 0.1.1-draft | 03/11/16 | Updates to terminology and inclusion of example message flows |
 | 0.2.0-draft | 16/01/17 | Version 0.2 ready for public release and comment |
 
-## 8 Attribution
+## 9 Attribution
 
 **ATTRIBUTION NOTICE**
 
