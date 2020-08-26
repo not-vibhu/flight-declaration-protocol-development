@@ -442,7 +442,7 @@ All refusals and acceptances imply that the receiver stored the declaration and 
 ``` json
 	{
 	"feedback_type": "technical_error",
-	"http_error_code": 500
+	"http_error_code": 500,
 	"message": "Service encountered an internal problem, try again later"
 	}
 
@@ -468,11 +468,11 @@ All refusals and acceptances imply that the receiver stored the declaration and 
 	
 **Example 1: Missing field**
 
-``` json	
+``` json
 	{
 	"feedback_type":"validation_error",
 	"validation_message":"Required properties are missing from the object:time_stamp",
-	"validation_path","#/"
+	"validation_path","/"
 	}
 ```
 	
@@ -549,7 +549,7 @@ All refusals and acceptances imply that the receiver stored the declaration and 
 
 ``` json
 	{
-	"feedback_type":"acceptance"
+	"feedback_type":"acceptance",
 	"remarks": [
 		"Minimize noise on residential area",
 		"RC Airfield nearby"
