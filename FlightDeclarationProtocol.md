@@ -6,15 +6,15 @@
 	- [3 Example Declarations](#3-example-declarations)
 	- [4 Details](#4-details)
 		- [4.1 message](#41-message)
-		- [4.2 flight_declaration](#42-flightdeclaration)
+		- [4.2 flight_declaration](#42-flight_declaration)
 			- [4.3 idents](#43-idents)
-		- [4.4 operation_mode enum](#44-operationmode-enum)
+		- [4.4 operation_mode enum](#44-operation_mode-enum)
 		- [4.3 flightPart](#43-flightpart)
 			- [4.3.1 Notes](#431-notes)
 			- [4.3.2 Altitude Datum enum](#432-altitude-datum-enum)
-	- [5 Declaration Feedback](#5-declaration-feedback)
-		- [5.1 Technical errors](#51-technical-errors)
-		- [5.2 Validation errors](#52-validation-errors)
+	- [5 Declaration feedback](#5-declaration-feedback)
+		- [5.1 Technical Errors](#51-technical-errors)
+		- [5.2 Validation Errors](#52-validation-errors)
 		- [5.3 Refusals](#53-refusals)
 		- [5.4 Acceptances](#54-acceptances)
 	- [6 Standard Concepts](#6-standard-concepts)
@@ -49,16 +49,14 @@ In this specification, we introduce and propose the following definitions:
 
 ## 3 Example Declarations
 
-
 **Example 1:** A VLOS survey flight with a polygonal area of operation sent after the fact.
-
+```
 	{
 	"exchange_type":"flight_declaration",
 	"flight_id": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
 	"plan_id": "05ccbdc5-81cd-4da4-aaf9-50feb3d3673c",
 	"flight_state":2,
 	"flight_approved":0,
-	"flight_completed":1,
 	"sequence_number":0,
 	"time_stamp":"2018-08-15T15:29:08.842Z",
 	"version":"1.0.0",
@@ -121,17 +119,16 @@ In this specification, we introduce and propose the following definitions:
 		"actual_landing_time" : "2018-08-15T15:21:10.802773Z"
 	}
 	}
-
+```
 **Example 2:** A BVLOS delivery flight with an out bound leg and a return leg, the return leg being flown an hour 
 after the return leg. This drone is expecting to provide telemetry during the flight
-
+```
 	{
 	"exchange_type":"flight_declaration",
 	"flight_id": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
 	"plan_id": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
 	"flight_state":2,
 	"flight_approved":0,
-	"flight_completed":1,
 	"sequence_number": 0,
 	"time_stamp": "2018-08-15T14:29:08.842Z",
 	"version": "1.0.0",
@@ -214,13 +211,14 @@ after the return leg. This drone is expecting to provide telemetry during the fl
 		]
 	}
 	}
-
-
+```
 ## 4 Details
+
 ### 4.1 message
 
 The primary entity exchanged between Originating and Interested Parties.
 
+```
 	{
 		"flight_id": "5a7f3377-b991-4cc8-af2d-379d57f786d1",
 		"plan_id": "a5b5484c-a23c-4e83-8bb8-a6a5c294e45b",
@@ -229,6 +227,7 @@ The primary entity exchanged between Originating and Interested Parties.
 		"flight_declaration": { ... },
 		"version": "1.0.0"
 	}
+```
 
 | Name | Description | Type |
 | --- | --- | --- |
@@ -241,10 +240,10 @@ The primary entity exchanged between Originating and Interested Parties.
 | **version** | The version of this protocol that the message has been implemented from. | string - currently "0.2.0" |
 | **flight_state** | The state of the flight at the given time_stamp 0 - proposed, 1 - active, 2 - completed | integer |
 | **flight_approved** | Is the flight approved at the given time_stamp 0 - False, 1 - True | integer |
-| **flight_completed** | Is the flight completed at the given time_stamp 0 - False, 1 - True. | integer |
 
 ### 4.2 flight_declaration
 
+```
 	{
 			"parts": {...},
 			"purpose": "Delivery",
@@ -261,6 +260,7 @@ The primary entity exchanged between Originating and Interested Parties.
 			"actual_take_off_time" : "2018-08-04T22:44:30.652Z",
 			"actual_landing_time" : "2018-08-30T14:51:10.802773Z"
 	}
+```
 
 
 | Name | Description | Type |
@@ -277,8 +277,7 @@ The primary entity exchanged between Originating and Interested Parties.
 
 It is expected that a future version of this specification will include a telemetryEndPoint field. This is an endpoint that an interest party would be able to call to get live telemetry while the flight was in progress.
 
-
-   
+  
 #### 4.3 idents
 
 To allow a flight to be correlated with positional data from other sources (e.g. ADSB or RADAR) a flight declaration can 
@@ -289,10 +288,12 @@ include one or more _idents_ that will be associated with this flight.
 | **method** | The name of the technology providing the ident | string { "adsb", "flarm" } |
 | **ident** | The identifier in the specified data source that will identify this flight. | string |
 
+```
     {
         "method": "adsb",
         "ident": "4840D6"
     }
+```
 
 It is recognised that not all idents that a drone may be allocated will be available at the time of flight declaration. If a drone is allocated an ident it should update the flight declaration to include the new ident. It must not be treated as an error if the Interested Party does not recognise a method that is provided.
 
@@ -318,7 +319,7 @@ A flight consists of one or more parts and these parts must be declared as a Geo
 | **max_altitude** | The maximum altitude that the drone will achieve during the _flightPart_. | altitude |
 | **min_altitude** | The minumum altitude that the drone will achieve during the _flightPart_. | altitude |
 
-
+```json
 	{
 			"type": "FeatureCollection",
 			"features": [
@@ -383,14 +384,16 @@ A flight consists of one or more parts and these parts must be declared as a Geo
 			]
 	}
 
+```
+
 #### 4.3.1 Notes
+
 - No parts of a declared flight can have overlapping start and end times.
 - For geography, a _FeatureCollection_ is to be used to describe :
   - _Polygon_ is used to define the area where a drone is expected to operate. When the geography is a _Polygon_, multiple linear rings representing the exterior ring (and optionally 'holes') should be supported. This allows the geography to define parts of the area where the drone will not operate.
   - _LineString_ should be used when there is a defined route that the drone is expected to follow. When the geography is a _LineString_, it may have more than two points.
   - No other GeoJSON types are supported.
   - For version 1.0 of the specification, neither sps nor amsl are supported datums for max_altitude or min_altitude
-
 
 #### 4.3.2 Altitude Datum enum
 
@@ -405,11 +408,12 @@ This specification defines the following altitude datums, however specific messa
 
 An altitude 152.4 metres above ground level would be represented by the following entity:
 
+``` json
     {
         "metres": 152.4,
         "datum": "agl"
     }
-
+```
 
 ## 5 Declaration feedback
 
@@ -435,19 +439,25 @@ All refusals and acceptances imply that the receiver stored the declaration and 
 
 **Example 1: Receiver internal error**
 
+``` json
 	{
 	"feedback_type": "technical_error",
 	"http_error_code": 500
 	"message": "Service encountered an internal problem, try again later"
 	}
 
+```
+
 **Example 2: Unauthorized**
 
+``` json
 	{
 	"feedback_type":"technical_error",
 	"http_error_code": 401,
 	"message": "You are not authorized to submit flight declarations"
 	}
+
+```
 	
 ### 5.2 Validation Errors
 
@@ -457,20 +467,24 @@ All refusals and acceptances imply that the receiver stored the declaration and 
 | **validation_path** | The json path pointing to the validation failure, in the form of a JSON Pointer ( https://tools.ietf.org/html/rfc6901 ) | string |
 	
 **Example 1: Missing field**
-	
+
+``` json	
 	{
 	"feedback_type":"validation_error",
 	"validation_message":"Required properties are missing from the object:time_stamp",
 	"validation_path","#/"
 	}
+```
 	
 **Example 2: Value out of range, typo in first element of a feature collection array**
 
+``` json
 	{
 	"feedback_type":"validation_error",
 	"validation_message":"Value 'Featured' is not defined in enum"
 	"validation_path","#/parts/features/0/type"
 	}
+```
 	
 ### 5.3 Refusals
 
@@ -479,13 +493,15 @@ All refusals and acceptances imply that the receiver stored the declaration and 
 | **causes**| An optional array of causes containing json pointers (see 5.2 ) and plaintext explanations | array |
 
 **Example 1: Unexplained refusal**
-	
+``` json
 	{
 	"feedback_type":"refusal",
 	}
+```
 	
 **Example 2: Refusal due to high-altitude**
 
+``` json
 	{
 	"feedback_type":"refusal",
 	"causes": [
@@ -495,9 +511,11 @@ All refusals and acceptances imply that the receiver stored the declaration and 
 		}
 	]
 	}
+```
 	
 **Example 3: Refusal due to unallowed night flight**
 
+``` json
 	{
 	"feedback_type":"refusal",
 	"causes": [
@@ -511,6 +529,7 @@ All refusals and acceptances imply that the receiver stored the declaration and 
 		},
 	]
 	}
+```
 		  
 ### 5.4 Acceptances
 
@@ -520,12 +539,15 @@ All refusals and acceptances imply that the receiver stored the declaration and 
 
 **Example 1: Unconditional acceptance**
 
+``` json
 	{
 	"feedback_type":"acceptance"
 	}
+```
 
 **Example 2: Acceptance with notification**
 
+``` json
 	{
 	"feedback_type":"acceptance"
 	"remarks": [
@@ -533,6 +555,7 @@ All refusals and acceptances imply that the receiver stored the declaration and 
 		"RC Airfield nearby"
 	]
 	}
+```
 
 ## 6 Standard Concepts
 
